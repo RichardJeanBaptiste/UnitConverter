@@ -4,9 +4,6 @@ import java.util.*;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.ui.Model;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 
 @RestController
@@ -30,6 +27,84 @@ public class IndexController {
         return String.valueOf(value) + startUnit + " = " + convertedValue;
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping("/weight")
+    public String weightPost(WeightForm form) {
+
+        return form.getWeight() + " " + form.getStartUnit() + " " + form.getEndUnit();
+    }
+
+}
+
+class WeightForm {
+    private String weight;
+    private String startUnit;
+    private String endUnit;
+
+    // mg, g, kg, oz, lb
+    private double[] mg = {1.0, 0.001, 0.000001, 0.000035274, 0.0000022046};
+    private double[] g  = {1000.0, 1.0, 0.001, 0.3527396, 0.00220462};
+    private double[] kg = {1000000.0, 1000.0, 1.0, 35.2739619, 2.20462262};
+    private double[] oz = {28349.5231, 28.3495231, 0.02834952, 1.0, 0.0625};
+    private double[] lb = {453592.37, 453.59237, 0.45359237, 16.0, 1.0};
+
+    private static HashMap<String, double[]> conversions = new HashMap<>();
+
+    public WeightForm() {
+        conversions.put("mg", mg);
+        conversions.put("g", g);
+        conversions.put("kg", kg);
+        conversions.put("oz", oz);
+        conversions.put("lb", lb);
+    }
+
+    public String getWeight() {
+        return weight != null ? weight.trim() : null; 
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getStartUnit() {
+        return startUnit != null ? startUnit.trim() : null; 
+    }
+
+    public void setStartUnit(String startUnit) {
+        this.startUnit = startUnit;
+    }
+
+    public String getEndUnit() {
+        return endUnit != null ? endUnit.trim() : null; 
+    }
+
+    public void setEndUnit(String endUnit) {
+        this.endUnit = endUnit;
+    }
+
+    public String convertUnits(String startUnit, String endUnit, double value) {
+
+        // mg, g, kg, oz, lb
+        var x = conversions.get(startUnit);
+        double cVal;
+        String cString = "";
+
+        switch(endUnit) {
+            case "mg":
+                break;
+            case "g":
+                break;
+            case "kg":
+                break;
+            case "oz":
+                break;
+            case "lb":
+                break;
+            default:
+                break;
+        }
+        return cString;
+    }
 }
 
 class LengthForm {
@@ -87,7 +162,7 @@ class LengthForm {
         this.endUnit = endUnit;
     }
 
-    public static String convertUnits(String startUnit, String endUnit, double value) {
+    public String convertUnits(String startUnit, String endUnit, double value) {
 
         var x = conversions.get(startUnit);
         double cVal;
@@ -131,5 +206,6 @@ class LengthForm {
         }
         return cString;
     }
-
 }
+
+

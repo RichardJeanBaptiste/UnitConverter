@@ -19,7 +19,7 @@ export default function WeightConverter() {
     }
     const handleSubmit = () => {
 
-      fetch("http://localhost:8080/conv", {
+      fetch("http://localhost:8080/weight", {
         method: 'POST',
         body: new URLSearchParams(weightForm)
       })
