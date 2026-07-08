@@ -4,9 +4,9 @@ export default function TempConverter() {
     const [cVal, setCVal] = useState("");
 
     const [tempForm, setTempForm] = useState({
-        temperature: "",
-        startUnit: "c",
-        endUnit: "c"
+        temp: "",
+        startUnit: "C",
+        endUnit: "C"
     })
 
     const handleFormChange = (key: any) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -17,8 +17,8 @@ export default function TempConverter() {
         }))
     }
     const handleSubmit = () => {
-
-        fetch("http://localhost:8080/conv", {
+        console.log(tempForm);
+        fetch("http://localhost:8080/temp", {
             method: 'POST',
             body: new URLSearchParams(tempForm)
         })
@@ -36,8 +36,8 @@ export default function TempConverter() {
                 style={{ width: '100%', height:'30vh', justifyContent: 'center', alignItems: 'center', gap: 30, marginTop: '5%' }}
             >
                 <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '30%', alignItems: 'center'}}>
-                <label htmlFor='temperature'>Enter the temperature to convert:</label>
-                <input id="temperature" onChange={handleFormChange("temperature")} value={tempForm.temperature}/>
+                <label htmlFor='temp'>Enter the temperature to convert:</label>
+                <input id="temp" onChange={handleFormChange("temp")} value={tempForm.temp}/>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '30%', alignItems: 'center' }}>

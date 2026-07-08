@@ -16,7 +16,7 @@ public class IndexController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/conv")
-    public String testPost(LengthForm form){
+    public String lengthPost(LengthForm form){
         //System.out.println(form.getStartUnit());
 
         String startUnit = form.getStartUnit();
@@ -31,9 +31,102 @@ public class IndexController {
     @PostMapping("/weight")
     public String weightPost(WeightForm form) {
 
-        return form.getWeight() + " " + form.getStartUnit() + " " + form.getEndUnit();
+        String startUnit = form.getStartUnit();
+        String endUnit = form.getEndUnit();
+        double value = Double.parseDouble(form.getWeight());
+        String convertedValue = form.convertUnits(startUnit, endUnit, value);
+
+        return String.valueOf(value) + startUnit + " = " + convertedValue;
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping("/temp")
+    public String tempPost(TempForm form) {
+
+        String startUnit = form.getStartUnit();
+        String endUnit = form.getEndUnit();
+        double value = Double.parseDouble(form.getTemp());
+        String convertedValue = form.convertUnits(startUnit, endUnit, value);
+
+        //return startUnit + " " + endUnit + " " + val;
+        return String.valueOf(value) + startUnit + " = " + convertedValue;
+    }
+
+}
+
+
+class TempForm {
+    private String temp;
+    private String startUnit;
+    private String endUnit;
+
+
+    public String getTemp() {
+        return temp != null ? temp.trim() : null; 
+    }
+
+    public void setTemp(String temp) {
+        this.temp = temp;
+    }
+
+    public String getStartUnit() {
+        return startUnit != null ? startUnit.trim() : null; 
+    }
+
+    public void setStartUnit(String startUnit) {
+        this.startUnit = startUnit;
+    }
+
+    public String getEndUnit() {
+        return endUnit != null ? endUnit.trim() : null; 
+    }
+
+    public void setEndUnit(String endUnit) {
+        this.endUnit = endUnit;
+    }
+
+    public String convertUnits(String startUnit, String endUnit, double value) {
+
+        double cVal = 0;
+        String cString = "";
+
+        switch(startUnit) {
+            case "F":
+                if(endUnit.equals("C")) {
+                    cVal = (value - 32) / 1.8;
+                } else if(endUnit.equals("K")) {
+                    cVal = ((value - 32) * (5.0 / 9.0)) + 273.15;
+                } else {
+                    cVal = value;
+                }
+
+                break;
+            case "C":
+                if(endUnit.equals("F")) {
+                    cVal = (value * 1.8) + 32;
+                } else if(endUnit.equals("K")) {
+                    cVal = value + 273.15; 
+                } else {
+                    cVal = value;
+                }
+
+                break;
+            case "K":
+                if(endUnit.equals("F")) {
+                    cVal = ((value - 273.15) * (9.0 / 5.0)) + 32;
+                } else if(endUnit.equals("C")) {
+                    cVal = value - 273.15;
+                } else {
+                    cVal = value;
+                }
+                break;
+            default:
+                break;
+        }
+
+        cString = String.valueOf(cVal) + endUnit;
+        return cString;
+    }
 }
 
 class WeightForm {
@@ -91,14 +184,24 @@ class WeightForm {
 
         switch(endUnit) {
             case "mg":
+                cVal = x[0];
+                cString = String.valueOf(value * cVal) + "mg";
                 break;
             case "g":
+                cVal = x[1];
+                cString = String.valueOf(value * cVal) + "g";
                 break;
             case "kg":
+                cVal = x[2];
+                cString = String.valueOf(value * cVal) + "kg";
                 break;
             case "oz":
+                cVal = x[3];
+                cString = String.valueOf(value * cVal) + "oz";
                 break;
             case "lb":
+                cVal = x[4];
+                cString = String.valueOf(value * cVal) + "lb";
                 break;
             default:
                 break;
